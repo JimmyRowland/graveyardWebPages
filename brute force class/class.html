@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+
+    if(document.getElementById(input_course)){
+        var course='1046';
+        var reset = "B14659513333459637514";
+        var input_course = "P301_ADDSCTNUM";
+        var add = "B14659039347528164276";
+        var continue_add = "B14660010737365039539";
+        var request_class="B14661188249151322230";
+        bruteForce();
+    }
+    function bruteForce(){
+        setTimeout(add_course(),1000);
+    }
+    function add_course(){
+        if(document.getElementById(input_course)){
+            setTimeout(function(){document.getElementById(input_course).value=course;console.log("input");
+            setTimeout(function(){document.getElementById(add).click();console.log("add");
+            setTimeout(function(){
+                if(document.getElementById(continue_add).style.display!="none"){
+                    setTimeout(function(){
+                        document.getElementById(continue_add).click();
+                    },1000);
+                }
+                else{
+                    setTimeout(click_reset(),1000);
+                }
+            },3000);
+            },1000);
+            },1000);
+        }
+    }
+    function click_reset(){
+        if(document.getElementById(request_class).style.display!="none"){
+            document.getElementById(reset).click();console.log("reset");
+            setTimeout(bruteForce(),1000);
+        }
+    }
+    document.getElementById("B14659513333459637514").click();
+    document.getElementById("P301_ADDSCTNUM").value=course;
+    document.getElementById("B14659039347528164276").click();
+    document.getElementById("B14660010737365039539").click();
+</script>
+</body>
+</html>

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>wiki</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" type="text/css">
+    <script   src="https://code.jquery.com/jquery-2.2.4.min.js"   integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="   crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<style>
+    #select{
+
+        margin-right:0;
+    }
+    #select>li{
+        width:100%;
+    }
+    .header{
+        background-color: cyan;
+        padding-right:0;
+
+        padding-left:50px;
+        height:150px;
+    }
+    .vcenter>h1{
+        font-weight: 900;
+        color: darkblue;
+        margin-top:40px;
+    }
+    .vcenter{
+        margin-top:10px;
+
+    }
+    .avatar{
+        border-radius: 50%;
+        width:60px;
+        margin:5px 0;
+        border:2px white;
+    }
+    .onlineGamer{
+        background-color: chartreuse;
+        color: darkslateblue;
+        border-top: white 2px solid;
+        margin:0;
+    }
+    .offlineGamer{
+        background-color:darkslateblue;
+        color: chartreuse;
+        border-top: white 2px solid;
+        margin:0;
+    }
+
+
+
+</style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <div class="row">
+            <div class="col-xs-10 vcenter"><h1>TWITCH STREAMERS</h1></div>
+            <div class="col-xs-2 vcenter">
+                <ul class="list-group" id="select">
+                    <li class="list-group-item active" id="all" onclick="idall()">All</li>
+                    <li class="list-group-item" id="online" onclick="idonline()">Online</li>
+                    <li class="list-group-item" id="offline" onclick="idoffline()">Offline</li>
+                </ul>
+            </div>
+        </div>
+
+
+
+
+
+
+    </div>
+
+    <div class="online">
+
+    </div>
+    <div class="offline">
+
+    </div>
+
+
+</div>
+<script>
+    var gamers=["ESL_SC2", "OgamingSC2", "cretetion", "freecodecamp", "storbeck", "habathcx", "RobotCaleb", "noobs2ninjas", "brunofin","comster404"];
+
+    var offline=[];
+    var online=[];
+    var notExist=[];
+    var $online=$(".online");
+    var $offline=$(".offline");
+    var twitch="https://www.twitch.tv/";
+    var baseUrl="https://api.twitch.tv/kraken/streams/";
+    var baseUrl0="https://api.twitch.tv/kraken/channels/";
+    var variables=[];
+    var result={};
+    var $all=$("#all");
+    var $idOnline=$("#online");
+    var $idOffline=$("#offline");
+    function getOnline(){
+
+        for (var i=0; i < online.length; i++){
+            //console.log(online);
+            $online.append(online[i],'<div class="row onlineGamer"><div class="col-xs-2"><img class="avatar" src="'+online[i][2]+'" alt="'+online[i][0]+'"/></div><div class="col-xs-2"><p><a href="'+twitch+online[i][0]+'">ESL_SC2</a></p></div><div class="col-xs-8"><p>'+twitch+online[i][1]+'</p></div></div>');
+            //console.log(online);
+        }
+    }
+
+    gamers.map(function(gamer){
+        $.getJSON(baseUrl+gamer).then (function(json){
+
+
+
+            if(json.stream===null){
+                $.getJSON(baseUrl0+gamer).then(function(json0){
+                    $offline.append('<div class="row offlineGamer"><div class="col-xs-2"><img class="avatar" src="'+json0.logo+'" alt="'+gamer+'"/></div><div class="col-xs-2"><p><a href="'+twitch+gamer+'">'+gamer+'</a></p></div><div class="col-xs-8"><p>Offline</p></div></div>');
+
+                    console.log(json);
+                    offline.push(gamer);
+                });
+
+            }else{
+                console.log(json);
+                online.push([gamer,json.stream.channel.status,json.stream.channel.logo]);
+                $online.append('<div class="row onlineGamer"><div class="col-xs-2"><img class="avatar" src="'+json.stream.channel.logo+'" alt="'+gamer+'"/></div><div class="col-xs-2"><p><a href="'+twitch+gamer+'">'+gamer+'</a></p></div><div class="col-xs-8"><p>'+json.stream.channel.status+'</p></div></div>');
+
+            }
+        },
+        function(){
+
+            $offline.append('<div class="row offlineGamer"><div class="col-xs-2"><img class="avatar" src="https://static-cdn.jtvnw.net/jtv-static/404_preview-300x300.png" alt="'+gamer+'"/></div><div class="col-xs-2"><p><a href="https://s.codepen.io/FreeCodeCamp/fullpage/undefined">'+gamer+'</a></p></div><div class="col-xs-8"><p>Account Closed</p></div></div>');
+
+            notExist.push(gamer);
+
+        });
+    });
+    function idall(){
+        if ($all.hasClass("active")){
+            return 0;
+        }else{
+            $(".active").removeClass("active");
+            $all.addClass("active");
+            $online.find(".row").css("display","block");
+            $offline.find(".row").css("display","block");
+
+
+
+        }
+    }
+    function idonline(){
+        if ($idOnline.hasClass("active")){
+            return 0;
+        }else{
+            $(".active").removeClass("active");
+            $idOnline.addClass("active");
+            $online.find(".row").css("display","block");
+            $offline.find(".row").css("display","none");
+
+
+
+        }
+    }
+    function idoffline(){
+        if ($idOffline.hasClass("active")){
+            return 0;
+        }else{
+            $(".active").removeClass("active");
+            $idOffline.addClass("active");
+            $online.find(".row").css("display","none");
+            $offline.find(".row").css("display","block");
+
+
+
+        }
+    }
+
+
+    //console.log(online);
+    //console.log(notExist);
+    //console.log(offline);
+    //getOnline();
+
+</script>
+
+</body>
+</html>

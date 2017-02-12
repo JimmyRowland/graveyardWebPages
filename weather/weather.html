@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>weather</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" type="text/css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/weather-icons/2.0.10/css/weather-icons.css" type="text/css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/weather-icons/2.0.10/css/weather-icons-wind.min.css" type="text/css">
+
+    <script   src="https://code.jquery.com/jquery-2.2.4.min.js"   integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="   crossorigin="anonymous"></script>
+    <style>
+        .wrapper{
+            text-align: center;
+        }
+        #cf{
+            color:blue;
+        }
+        #cf:hover{
+            color:red;
+        }
+    </style>
+</head>
+<body>
+<div class="wrapper">
+    <h1>Weather</h1>
+    <h3 id="city"></h3>
+    <h3 id="temp"></h3>
+    <h3 id="main"></h3>
+    <img src="" id="thum" alt="thum">
+</div>
+
+<table id="GeoResults"></table>
+<script>
+
+    var celsius;
+    var fahrenheit;
+
+    $.getJSON("http://ip-api.com/json/?callback=?", function(data) {
+        var table_body = "";
+        console.log(data.city);
+        var city = data.city;
+        $("#city").text(city);
+
+        var appid = "&APPID=11c0353da41016424cbe3e645165a730"
+        var url = "http://api.openweathermap.org/data/2.5/weather?q=" + city +appid;
+        console.log(url);
+        $.getJSON(url, function(weather) {
+            celsius = Math.round(weather.main.temp/10) + ' &#176;<span id="cf" onclick="ctof()">C</span>';
+            fahrenheit= Math.round(weather.main.temp/10*1.8 +32)+ ' &#176;<span id="cf" onclick="ctof()">F</span>';
+
+            $("#temp").html(celsius);
+            $("#main").text(weather.weather[0].main);
+            $("#thum").attr("src","http://openweathermap.org/img/w/"+weather.weather[0].icon+".png");
+        });
+    });
+
+    function ctof(){if($( "#cf" ).text()==="C"){
+        $("#temp").html(fahrenheit);
+    } else if($( "#cf" ).text()==="F"){$("#temp").html(celsius);}
+    };
+
+
+
+
+</script>
+</body>
+</html>
+
+
+
+
+</body>
+</html>

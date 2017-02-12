@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../bootstrap-3.3.6/dist/css/bootstrap.css" type="text/css">
+    <link rel="stylesheet" href="../font-awesome-4.6.3/css/font-awesome.min.css" type="text/css">
+    <script   src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<style>
+    .wrapper{
+        margin:100px auto;
+        height:700px;
+        width:600px;
+        position:relative;
+
+    }
+    .row{padding:0;
+    margin:0;}
+    .text-center >div{
+        height:200px;
+        background-color: burlywood;
+        padding:0;
+        margin:0;
+        border: black 2px solid;
+
+    }
+    .text-center >div>p{
+        font-size: 130px;
+        font-weight: 900;
+        margin:auto;
+    }
+</style>
+</head>
+<body>
+
+<div class="wrapper">
+    <div class="row" id="btns">
+        <div class="col-xs-8" id="button">
+            <button class="btn btn-primary" onclick='XXX("XO")'>Choose X(first)</button>
+            <button class="btn btn-primary" onclick='OOO("OX")'>Choose O</button>
+        </div>
+        <div class="col-xs-4" id="text"></div>
+    </div>
+    <div class="row text-center" id="0">
+        <div class="col-xs-4" id="00" onclick="clicked(this.id)"></div>
+        <div class="col-xs-4" id="01"></div>
+        <div class="col-xs-4" id="02"></div>
+
+    </div>
+    <div class="row text-center" id="1">
+        <div class="col-xs-4" id="10"></div>
+        <div class="col-xs-4" id="11"></div>
+        <div class="col-xs-4" id="12"></div>
+
+    </div>
+    <div class="row text-center" id="2">
+        <div class="col-xs-4" id="20"></div>
+        <div class="col-xs-4" id="21"></div>
+        <div class="col-xs-4" id="22"></div>
+
+    </div>
+</div>
+<script>
+
+    var OX={"O":[],"X":[]};
+    var OX1={"O":[],"X":[]};
+
+    var down=['00','11','22'];
+    var up=['02','11','20'];
+    var good=['02','11','20','00','22'];
+    var bad=['01','10','21','12'];
+    var X = [];
+    var step=1;
+    var danger=[];
+    var humanfirst;
+    var oOrx ='XO';
+    var choose='XO';
+    var $text=$("#text");
+    var ifwon=false;
+    var ifOver=false;
+
+    function boring(){
+        var dead=danger[danger.length-1];
+        var chance=danger[danger.length-2];
+        console.log([danger,dead,chance]);
+        function reverse(id){
+            var temp='';
+            console.log('reverse',id);
+            for (var x in id){
+                switch (id[x]){
+                    case '0':
+                        temp+='2';
+                        break;
+                    case '2':
+                        temp+='0';
+                        break;
+                }
+            }
+            console.log('temp',temp);
+            return temp;
+        }
+        function best(dead, chance){
+            if(chance.length===4){
+                var first=chance.slice(0,2);
+                var second=chance.slice(2,4);
+                if(good.indexOf(first)===-1&&bad.indexOf(first)===-1){
+                    chance=second;
+                }else(chance=first);
+
+            }
+
+            function check(item){
+                return good.indexOf(item)!==-1||bad.indexOf(item)!==-1
+            }
+            console.log([dead,chance,'chancedead']);
+            console.log(['bestcheck',good,bad]);
+            if(chance.length===2 && check(chance)){
+                return chance;
+            }else if (dead.length===2 && check(dead)){
+                return dead;
+            }else if (good.length!==0){
+                console.log(['good[Math.floor(Math.random())*good.length]',good[Math.floor(Math.random())*good.length],Math.floor(Math.random())]);
+                return good[Math.floor(Math.random()*good.length)];
+            }else{
+                return bad[Math.floor(Math.random()*bad.length)];
+            }
+
+        }
+        var move;
+        var human;
+        var computer;
+        switch (step){
+            case 1:
+                    console.log(Math.floor(Math.random()*5),'Math.floor(Math.random())*5');
+                move = good[Math.floor(Math.random()*5)];
+                clicked(move,"X","O");
+                break;
+            case 2:
+                human=OX1['X'][OX1['X'].length-1];
+                console.log([human,OX1,OX1['X'],OX1['X'].length-1],OX1['X'][OX1['X'].length-1]);
+                if (human!=='11'){
+                    move='11';
+                    clicked(move,"O","X");
+
+                }else{
+                    move=good[Math.floor(Math.random()*good.length)];
+                    clicked(move,"O","X");
+                }
+                break;
+
+            case 3:
+                human=OX1['O'][OX1['O'].length-1];
+                computer=OX1['X'][OX1['X'].length-1];
+                if (human.indexOf('1')===-1){
+                    move=reverse(human);
+                    if (good.indexOf(move)===-1){
+                        move=good[Math.floor(Math.random()*good.length)];
+                    }
+                    clicked(move,"X","O");
+
+                }else{
+                    move=best(dead,chance);
+                    clicked(move,"X","O");
+
+                }
+                break;
+            case 4:
+                computer=OX1['O'][OX1['O'].length-1];
+                human=OX1['X'][OX1['X'].length-1];
+                console.log('case4',OX1['X'],reverse(human),OX1['X'],OX1['X'].length-1,human,OX1['X'].indexOf(reverse(human))!==-1);
+                if(OX1['X'].indexOf(reverse(human))!==-1){
+
+                    move=bad[Math.floor(Math.random()*bad.length)];
+                    console.log('case4true',move);
+                    clicked(move,"O","X");
+                }else{
+                    clicked(best(dead,chance),"O","X");
+
+                }
+                break;
+
+            case 5:
+            case 7:
+            case 9:
+                clicked(best(dead,chance),"X","O");
+                break;
+            case 6:
+            case 8:
+                clicked(best(dead,chance),"O","X");
+                break;
+        }
+    }
+    function win(id,ox,enemy){
+        var kill=[];
+
+        function wincorner(down){
+            var victory=0;
+            var attack;
+            console.log(id[0]===id[1]);
+            if(down.indexOf(id)!==-1){
+                console.log(OX[ox]);
+                for(var i in OX[ox]){
+                    console.log(['TorF',OX[ox][i].indexOf(down[i]),OX[ox][i],down[i]]);
+                    if(OX[ox][i].indexOf(down[i])!==-1){
+                        victory++;
+                        console.log(victory);
+                    }else if(OX[enemy][i].indexOf(down[i])===-1){
+                        attack=down[i];
+                    }else{
+                        attack=0;
+                    }
+                }
+                if(victory===3){
+                    down.map(function(item){
+                        $("#"+item).css("color","red");
+
+
+                    });
+                    return 'over(ox)';
+                }
+                console.log([victory,'vic']);
+                if(victory===2 && good.indexOf(attack)!==-1){
+                    console.log(attack,good,'upattack');
+                    return attack;
+                }
+            }
+            return 0;
+        }
+        function winrow(){
+            var attack=0;
+            var victory=0;
+            console.log(id[0]===id[1]);
+
+            console.log(OX[ox]);
+            for(var i in OX[ox]){
+                victory=0;
+                attack=0;
+
+
+
+                for(var three in "012"){
+                    if(OX[ox][three].indexOf(three+i)!==-1){
+                        victory++;
+                        console.log(['iii',i,victory,three+i,OX[ox][three],ox,step]);
+                    }else if(OX[enemy][three].indexOf(three+i)===-1){
+                        attack=three+i;
+                        console.log(attack,'three+i');
+                    }
+                }
+                if(victory===3){
+                    for(var threee in "012"){
+                        $("#"+threee+i).css("color","red");
+
+                    }
+                    return 'over(ox)';
+                }
+                console.log([victory,attack,"va"]);
+
+                if(OX[ox][i].length===3){
+                    OX[ox][i].map(function(item){
+                        $("#"+item).css("color","red");
+
+                    });
+                    return 'over(ox)';
+
+                }else if(OX[ox][i].length===2 && OX[enemy][i].length===0){
+                    for (var z in '012'){
+                        if (OX[ox][i].indexOf(i+z)===-1){
+                            attack=i+z;
+
+                            return attack;
+                        }
+                    }
+                }
+                if(victory===2 && attack!==0){
+                    console.log([attack,'attack']);
+                    return attack;
+                }
+
+            }
+            return 0;
+
+
+        }
+
+        kill.push(wincorner(down));
+        kill.push(wincorner(up));
+        kill.push(winrow());
+        console.log(['kill',kill,step]);
+        var killtwo='';
+        for(var o in kill){
+            if (kill[o]==='over(ox)'){
+                ifwon = true;
+            }else if (kill[o].length===2){
+                console.log([kill[o],'o']);
+                killtwo+=[kill[o]];
+            }
+        }
+        if (killtwo===''){
+            killtwo=0;
+        }
+        return killtwo;
+
+
+    }
+
+
+
+
+
+    function listen(){
+        for (var y in '012'){
+
+            for(var x in '012'){
+                var $xy=$("#"+y+x);
+
+
+
+                $xy.attr("onclick","clicked(this.id,'"+oOrx[0]+"','"+oOrx[1]+"')");
+                $xy.html("");
+                $xy.css("color","black");
+                //$("#"+y+","+x).text("O");
+
+                }
+
+            }
+
+
+    }
+    function clicked(id,ox,enemy){
+        if(ifOver){
+            return 0;
+        }
+        //console.log(id);
+        //console.log(OX);
+        //console.log(ox);
+        //console.log(OX["O"]);
+        function remove(item){
+            var index = good.indexOf(item);
+            console.log(item);
+            if (index > -1) {
+                good.splice(index, 1);
+                return 0;
+            }
+            index = bad.indexOf(item);
+            if (index > -1) {
+                bad.splice(index, 1);
+                return 0;
+            }
+        }
+
+        var $id=$("#"+id);
+        $id.removeAttr("onclick");
+        console.log(['ididiid',id,step]);
+        OX[ox][id[0]].push(id);
+        OX1[ox].push(id);
+
+        $id.html('<p>'+ox+'</p>');
+        remove(id);
+
+
+        danger.push(win(id,ox,enemy));
+
+        console.log(OX[ox],ox);
+
+        step++;
+
+        if (step%2===humanfirst){
+            boring(danger);
+        }
+        if (ifwon){
+            over(ox);
+        }
+        if (step===10){
+            draw(ox);
+        }
+
+
+    }
+
+
+
+
+
+
+    function over(ox){
+        ifOver=true;
+        $text.html("<p>"+ox+" has won</p>");
+        $text.slideDown( 1000 );
+        $text.slideUp( 1000 );
+
+        setTimeout(function(){
+            console.log("THIS IS");
+            restart(choose);
+        }, 2000);
+
+
+
+
+    }
+    function draw(ox){
+        ifOver=true;
+        $text.html("<p>It was a draw</p>");
+        $text.slideDown( 1000 );
+        $text.slideUp( 1000 );
+        setTimeout(function(){
+            console.log("THIS IS");
+            restart(choose);
+        }, 2000);
+
+
+    }
+    function restart(choose){
+        OX={"O":[],"X":[]};
+        OX1={"O":[],"X":[]};
+        ifwon=false;
+        ifOver=false;
+
+        down=['00','11','22'];
+        up=['02','11','20'];
+        good=['02','11','20','00','22'];
+        bad=['01','10','21','12'];
+        X = [];
+        step=1;
+        danger=[];
+
+        oOrx =choose;
+        if(oOrx==='XO'){
+            humanfirst=0;
+        }else{humanfirst=1;  }
+
+
+        for(var x=0;x<3;x++){
+
+            OX.O.push([]);
+            OX.X.push([]);
+
+        }
+        listen();
+        console.log('restart',step,humanfirst);
+        if (step%2===humanfirst){
+            boring(danger);
+        }
+
+        return "asdtgsd";
+    }
+    restart(choose);
+    function XXX(ox){
+        if(ifOver){
+            return 0;
+        }
+        choose=ox;
+        restart(choose);
+    }
+    function OOO(ox){
+        if(ifOver){
+            return 0;
+        }
+        choose=ox;
+        restart(choose);
+    }
+
+
+
+
+
+</script>
+</body>
+</html>

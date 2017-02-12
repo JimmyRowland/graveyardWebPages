@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Simon Game</title>
+    <link rel="stylesheet" href="../bootstrap-3.3.6/dist/css/bootstrap.css" type="text/css">
+    <link rel="stylesheet" href="../font-awesome-4.6.3/css/font-awesome.min.css" type="text/css">
+    <script   src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <style>
+        .wrapper{
+            background-color: #7a43b6;
+            width:600px;
+            height:600px;
+            margin:5% auto;
+            color: white;
+
+            border-radius:50%;
+            z-index: -50;
+            padding:0;
+        }
+
+        .btn0{
+           margin:0;
+            padding:20px;
+            border:0;
+
+        }
+        .btn0>div{
+            width:270px;
+            height:270px;
+            z-index: -20;
+            cursor: pointer;
+
+
+        }
+        .green{
+            
+            background-color: #00CC00;
+            border-top-left-radius: 100%;
+            float: left;
+            margin-right:20px;
+        }
+        .red{
+            float: right;
+            background-color: red;
+            border-top-right-radius: 100%;
+        }
+        .yellow{
+            margin-right:20px;
+            float: left;
+            background-color: yellow;
+            border-bottom-left-radius: 100%;
+        }
+        .blue{
+            float:right;
+
+            background-color: #2aabd2;
+            border-bottom-right-radius: 100%;
+        }
+        #top0>div{
+            margin-top:20px;
+        }
+        .inner-circle{
+            z-index: 1;
+            width:280px;
+            height:280px;
+            background-color: #0f0f0f;
+            float: left;
+            position:absolute;
+            margin:160px 160px;
+            border: 20px solid #7a43b6;
+            padding:10px 40px !important;
+
+
+            border-radius: 50%;
+        }
+        .inner-btn{
+            margin-top:40px;
+        }
+        .btn-primary{
+            color:white;
+
+        }
+        .switchContainer{
+            margin:5px;
+            padding-left: 36px;
+        }
+
+
+
+        .switch {
+            background: #fff;
+            border-radius: 16px;
+            display: block;
+            height: 32px;
+            position: relative;
+            width: 80px;
+        }
+
+        .switch label {
+            color: #fff;
+            font-size: 20px;
+            font-weight: 300;
+            line-height: 32px;
+            text-transform: uppercase;
+            -webkit-transition: color .2s ease;
+            -moz-transition: color .2s ease;
+            -ms-transition: color .2s ease;
+            -o-transition: color .2s ease;
+            transition: color .2s ease;
+            width: 100px;
+        }
+
+        .switch label:nth-of-type(1) {
+            left: -110%;
+            position: absolute;
+            text-align: right;
+        }
+
+        .switch label:nth-of-type(2) {
+            position: absolute;
+            right: -110%;
+            text-align: left;
+        }
+
+        .switch input {
+            height: 32px;
+            left: 0;
+            opacity: 0;
+            position: absolute;
+            top: 0;
+            width: 80px;
+            z-index: 2;
+        }
+
+        .switch input:checked~label:nth-of-type(1) { color: #fff; }
+        .switch input:checked~label:nth-of-type(2) { color: #808080; }
+
+        .switch input~:checked~label:nth-of-type(1) { color: #808080; }
+        .switch input~:checked~label:nth-of-type(2) { color: #fff; }
+
+        .switch input:checked~.toggle {
+            left: 4px;
+        }
+
+        .switch input~:checked~.toggle {
+            left: 50px;
+        }
+
+        .switch input:checked {
+            z-index: 0;
+        }
+
+        .toggle {
+            background: #4a4a4a;
+            border-radius: 50%;
+            height: 28px;
+            left: 0;
+            position: absolute;
+            top: 2px;
+            -webkit-transition: left .2s ease;
+            -moz-transition: left .2s ease;
+            -ms-transition: left .2s ease;
+            -o-transition: left .2s ease;
+            transition: left .2s ease;
+            width: 28px;
+            z-index: 1;
+        }
+
+
+
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="inner-circle text-center">
+            <h3>Simon Game</h3>
+            <div class="row inner-btn">
+                <div class="row">
+                    <div class="col-xs-4">
+                        <button class="btn btn-primary">- -</button>
+                    </div>
+                    <div class="col-xs-4">
+                        <button class="btn btn-danger" onclick="start()">S</button>
+                    </div>
+                    <div class="col-xs-4">
+                        <button class="btn btn-info" onclick="strictBtn()">OFF</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-4">
+                        <p>COUNT</p>
+                    </div>
+                    <div class="col-xs-4">
+                        <p>START</p>
+
+                    </div>
+                    <div class="col-xs-4">
+                        <p>STRICT</p>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="switchContainer">
+                <div class="switch white" onclick="powerBtn()">
+
+                    <input type="radio" name="switch" id="switch-off">
+                    <input type="radio" name="switch" id="switch-on" checked>
+
+                    <label for="switch-off" onclick="powerOff()">Off</label>
+                    <label for="switch-on" onclick="powerOn()">On</label>
+
+                    <span class="toggle"></span>
+
+                </div> <!-- end switch -->
+            </div>
+
+
+        </div>
+        <div class="btns">
+            <div class="btn0">
+                <div class="green"></div>
+                <div class="red"></div>
+
+
+            </div>
+            <div class="btn0" id="top0">
+                <div class="yellow"></div>
+                <div class="blue"></div>
+
+            </div>
+        </div>
+
+
+
+    </div>
+<script>
+    var power=true;
+    var strict=false;
+    var error=new Audio("http://vocaroo.com/media_command.php?media=s0o2arQOgMTC&command=download_mp3");
+    var victory=new Audio("http://vocaroo.com/media_command.php?media=s0zekgJAYBM7&command=download_mp3");
+    var startupMusic=new Audio("http://vocaroo.com/media_command.php?media=s1Fa9XQjdu0Y&command=download_mp3");
+    var colorfulBtns=['.green','.red','.yellow','.blue'];
+    var sounds={
+        '.green':new Audio("https://s3.amazonaws.com/freecodecamp/simonSound1.mp3"),
+        '.red':new Audio("https://s3.amazonaws.com/freecodecamp/simonSound2.mp3"),
+        '.yellow':new Audio("https://s3.amazonaws.com/freecodecamp/simonSound3.mp3"),
+        '.blue':new Audio("https://s3.amazonaws.com/freecodecamp/simonSound4.mp3")
+    };
+    var listening=false;
+    var repeating=false;
+    var generate=[];
+    var repeat=[];
+    var count=0;
+    var index=0;
+    var temp;
+    $strict=$(".btn-info");
+    $count=$(".btn-primary");
+    $start=$(".btn-danger");
+    function newItem(){
+        return colorfulBtns[Math.floor(Math.random()*4)];
+    }
+    function strictBtn(){
+        if(power){
+            strict=!strict;
+            if(strict){
+                $strict.text("ON");
+            }else{
+                $strict.text("OFF");
+            }
+
+        }
+    }
+    function powerBtn(){
+        if(power){
+            powerOff();
+        }else{
+            powerOn();
+        }
+
+
+    }
+    function powerOff(){
+        if(!power){
+            return 0;
+        }else{
+
+            power=!power;
+            console.log(power);
+            $count.css("color","blue");
+            $count.text('- -');
+        }
+    }
+    function powerOn(){
+        if(power){
+            return 0;
+        }else{
+            power=!power;
+            console.log(power);
+            $count.css("color","white");
+            startupMusic.play();
+
+        }
+    }
+
+    function btnMouseDown(btnClass){
+        if(power){
+            console.log('down','l',listening,'r',repeating);
+            var $btnClass=$(btnClass);
+            $btnClass.css('opacity',"0.5");
+            //console.log(btnClass,sounds[btnClass],sounds);
+            sounds[btnClass].play();
+            if(repeating){
+                index++;
+                repeat.push(btnClass);
+
+            }
+
+        }
+    }
+    function btnMouseUp(btnClass){
+        if(!power){
+            return 0;
+        }
+        console.log('up','l',listening,'r',repeating);
+        $(btnClass).css('opacity',1);
+        if(repeating){
+            console.log(index,generate,repeat,generate[index]!==repeat[index]);
+            if (generate[index-1]!==repeat[index-1]){
+                return restart();
+            }else if(index===count){
+                setTimeout(function(){
+                    correct();
+                },1000);
+            }
+        }
+
+    }
+    function cToString(num){
+        if(num<10){
+            return '0'+num;
+        }
+        return num;
+    }
+    function start(){
+        if(!power){
+            return 0;
+        }
+        listening=false;
+        repeating=false;
+        generate=[];
+        repeat=[];
+        count=0;
+        index=0;
+
+
+        $count.text('- -');
+        $count.css('color',"blue");
+
+
+        setTimeout(function(){$count.css('color',"blue");},300);
+        setTimeout(function(){$count.css('color',"white");},600);
+        setTimeout(function(){$count.css('color',"blue");},900);
+        setTimeout(function(){
+            $count.css('color',"white");
+            $count.text(cToString(count));
+            correct();
+
+
+
+        },1200);
+
+
+
+
+
+
+
+
+        return 0;
+
+    }
+    function restart(){
+        $count.text('!!!');
+        error.play();
+        setTimeout(function(){
+            if(strict){
+                start();
+            }else{
+                $count.text(cToString(count));
+                replay();
+            }
+        },1000);
+    }
+    function replay(){
+        index=0;
+        repeat=[];
+        var i =0;
+        listening=true;
+        repeating=false;
+        function play(length){
+            console.log(i,length);
+            if (i===length){
+
+                repeating=true;
+                listening=false;
+                return 0;
+
+            }
+
+
+            btnMouseDown(generate[i]);
+
+            setTimeout(function(){
+                btnMouseUp(generate[i]);
+                i++;
+                play(length);
+            },1000);
+        }
+        play(generate.length);
+    }
+    function correct(){
+        if(count===30){
+            $count.text('win');
+            victory.play();
+            setTimeout(function(){
+                start();
+            },2000);
+            return 0;
+
+        }
+        count++;
+        $count.text(cToString(count));
+        generate.push(newItem());
+        console.log(generate);
+        replay();
+    }
+    colorfulBtns.map(function(btnClass){
+        $(btnClass).attr("onmousedown","btnMouseDown('"+btnClass+"')");
+        $(btnClass).attr("onmouseup","btnMouseUp('"+btnClass+"')");
+
+    });
+
+</script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    // ==UserScript==
+    // @name         New Userscript
+    // @namespace    http://tampermonkey.net/
+    // @version      0.1
+    // @description  try to take over the world!
+    // @author       You
+    // @include      http*://smccis.smc.edu/*
+    // @run-at       document-end
+    // ==/UserScript==
+    (function() {
+        'use strict';
+        var input_course_to_add = "P304_ADDSCTNUM";
+        if(document.getElementById(input_course_to_add)){
+
+            var addCourse=['2667','2667'];
+            var dropCourse=['1727','1727'];
+            var reset_className = "t12ButtonAlternative1";
+            var input_course_to_drop = "P304_DROPSCTNUM";
+            var swap_class_id = "B1115110830239483331";
+            var continue_add_id = "B1132840018039864104";
+            var request_class="";
+            var length = addCourse.length;
+            var index = length -1;
+            bruteForce();
+        }
+        function bruteForce(){
+            setTimeout(add_course(),500);
+        }
+        function add_course(){
+            if(document.getElementById(input_course_to_add)){
+                index +=1;
+                if(index>=length){index=0;}
+                console.log(index,addCourse[index],dropCourse[index]);
+                setTimeout(function(){document.getElementById(input_course_to_add).value=addCourse[index];document.getElementById(input_course_to_drop).value=dropCourse[index];console.log("input");
+                    setTimeout(function(){document.getElementById(swap_class_id).click();console.log("swap");
+                        setTimeout(function(){
+                            if(document.getElementById(continue_add_id).style.display!="none"){
+                                setTimeout(function(){
+                                    document.getElementById(continue_add_id).click();
+                                },1000);
+                            }
+                            else{
+                                setTimeout(click_reset(),5000);
+                            }
+                        },500);
+                    },500);
+                },500);
+            }
+        }
+        function click_reset(){
+
+                //document.getElementsByClassName(reset_className).click();console.log("reset");
+            setTimeout(bruteForce(),500);
+        }
+    })();
+</script>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #watch-header{
+            display: none;
+        }
+
+    </style>
+</head>
+<body>
+<script>
+    // ==UserScript==
+    // @name         Improve YouTube Transcript for Language learning
+    // @namespace    http://tampermonkey.net/
+    // @version      1.6
+    // @description  Improved YouTube Transcript for Language learning, click transcript to hide the element below the video.
+    // @author       AVES
+    // @require      https://greasyfork.org/scripts/2199-waitforkeyelements/code/waitForKeyElements.js?version=6349
+    // @require  https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js
+    // @include      http*://*.youtube.com/*
+    // @include      http*://youtube.com/*
+    // @run-at       document-end
+    // ==/UserScript==
+    function add(){
+        if(document.getElementsByClassName("yt-ui-menu-item has-icon yt-uix-menu-close-on-select action-panel-trigger action-panel-trigger-transcript").length===0){return;}
+        $('head').append('<style>.jfk-bubble.gtx-bubble { left:0 !important }</style>');
+        var $bar = document.getElementById("watch8-secondary-actions");
+        var $newButton= document.createElement('div');
+        $newButton.className="yt-uix-menu ";
+        var $transcriptButton=document.createElement("button");
+        $transcriptButton.className="yt-ui-menu-item has-icon yt-uix-menu-close-on-select action-panel-trigger action-panel-trigger-transcript";
+        var $label=document.createElement("span");
+        $label.className="yt-ui-menu-item-label";
+        var $textTranscript = document.createTextNode("Transcript");
+        $bar.appendChild($newButton);
+        $newButton.appendChild($transcriptButton);
+        $transcriptButton.appendChild($label);
+        $label.appendChild($textTranscript);
+        $transcriptButton.setAttribute("data-trigger-for","action-panel-transcript");
+
+        var $windowTranscript=document.getElementById("watch-actions-transcript");
+        var $h2Transcript= document.getElementsByClassName("yt-card-title");
+        var $title=document.getElementById("watch-header");
+        $transcriptButton.onclick=function(){
+            $title.style.display="none";
+            var sheet = document.createElement("STYLE");
+            var t = document.createTextNode(".caption-line-time { display: none; }.caption-line-text { width: 100%; }");
+            sheet.appendChild(t);
+            document.head.appendChild(sheet);
+            $h2Transcript[0].style.float="right";
+            $h2Transcript[0].style.padding="0 10px";
+            var $close= document.getElementById("action-panel-dismiss");
+
+
+
+            setTimeout(function(){$close.onclick=function(){$title.style.display="block";};},10);
+
+
+
+        };
+    }
+
+
+</script>
+<script>
+    function noLanguageCode(){var d,e,f,g,h,k,l,m,n,q,r,t,u,v,w,x,y,A=function(){var a={};a.language=f.options[f.selectedIndex].value;a.popupDblclick=g.checked?"true":"false";a.popupSelect=l.checked?"true":"false";a.popupDblclickKey=k.options[k.selectedIndex].value;a.popupSelectKey=n.options[n.selectedIndex].value;a.storeHistory=q.checked?"true":"false";a.allowCrossExtensionHistory=u.checked?"true":"false";a.enableHttps="true";window.localStorage.options=JSON.stringify(a);var b=document.getElementById("save-status");b.style.setProperty("-webkit-transition", "opacity 0s ease-out");b.style.opacity=1;window.setTimeout(function(){b.style.setProperty("-webkit-transition","opacity 0.4s ease-out");b.style.opacity=0},1500);z(!1);chrome.extension.getBackgroundPage()["gdx.updateOptions"]()}, G=function(){z(!1);var a=JSON.parse(window.localStorage.options);B(f,a.language);g.checked="true"===a.popupDblclick;C();l.checked="true"===a.popupSelect;D(); B(k,a.popupDblclickKey);B(n,a.popupSelectKey);q.checked="true"===a.storeHistory;u.checked="true"===a.allowCrossExtensionHistory; E();chrome.storage.local.get("word-history",function(a){r=a=Object.keys(a["word-history"]).length;t.innerHTML=a;F()})},F=function(){0<r&&q.checked?(w.disabled=!1,y.disabled=!1):0===r&&(w.disabled=!0,y.disabled=!0)}, H=function(a){var b="";a=a["word-history"];for(var c in a){var p=c.split("<");I=a[c];if(p[0]===p[1]){b=b+p[2],b=b+"\t",b=b+I,b=b+"\n";}} x.href=window.URL.createObjectURL(new Blob([b],{type:"text/plain"}));b=x;c=document.createEvent("MouseEvents");c.initEvent("click",!0, !0);b.dispatchEvent(c)},J=function(){chrome.storage.local.get("word-history",H)},K=function(){chrome.storage.local.set({"word-history":{}});r=0;t.innerHTML=0;F()},B=function(a,b){for(var c=0,p=a.options.length;c<p;c++)if(a.options[c].value===b){a.options[c].selected=!0;break}},z=function(a){d.disabled=!a;e.disabled=!a},L=function(){z(!0)},C=function(){var a=g.checked;k.disabled=!a;h.className=a?"":"text-disabled"},D=function(){var a=l.checked;n.disabled=!a;m.className=a?"":"text-disabled"},E=function(){var a= q.checked;u.disabled=!a;v.className=a?"":"text-disabled";a||(u.checked=!1);w.disabled=!a;y.disabled=!a;F()}; (function(){d=document.getElementById("save-btn");e=document.getElementById("reset-btn");f=document.getElementById("language-selector");g=document.getElementById("popup-dblclick-checkbox");h=document.getElementById("popup-dblclick-text");k=document.getElementById("popup-dblclick-key");l=document.getElementById("popup-select-checkbox");m=document.getElementById("popup-select-text");n=document.getElementById("popup-select-key");q=document.getElementById("store-history-checkbox");t=document.getElementById("num-words-in-history"); u=document.getElementById("allow-cross-extension-history-checkbox");v=document.getElementById("allow-cross-extension-history-text");w=document.getElementById("download-history-btn");x=document.getElementById("download-history-link");y=document.getElementById("clear-history-btn");r=0;d.addEventListener("click",A,!1);e.addEventListener("click",G,!1);g.addEventListener("change",function(){C()},!1);l.addEventListener("change",function(){D()},!1);q.addEventListener("change",function(){E()},!1);w.addEventListener("click", J,!1);y.addEventListener("click",K,!1);document.getElementById("year").innerText=(new Date).getFullYear();for(var a=document.getElementsByTagName("input"),b=0,c;c=a[b];b++)c.addEventListener("change",L,!1);a=document.getElementsByTagName("select");for(b=0;c=a[b];b++)c.addEventListener("change",L,!1);-1!==window.navigator.platform.toLowerCase().indexOf("mac")&&(document.getElementById("popup-dblclick-key-ctrl").innerHTML="Command",document.getElementById("popup-select-key-ctrl").innerHTML="Command"); J();G()})();}
+    $(".option-value-primary").append('<button id="download-history-btn1" class="btn btn-default" onclick="noLanguageCode()">Download history </button>');
+
+
+</script>
+</body>
+</html>

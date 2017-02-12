@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>quotes</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="main.css" type="text/css">
+    <script src="https://npmcdn.com/react@15.3.0/dist/react.min.js"></script>
+    <script src="https://npmcdn.com/react@15.3.0/dist/react-dom.min.js"></script>
+    <script src="https://npmcdn.com/babel-core@5.8.38/browser.min.js"></script>
+    <script   src="https://code.jquery.com/jquery-2.2.4.min.js"   integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="   crossorigin="anonymous"></script>
+
+</head>
+<body>
+<div class="wrapper">
+    <div class="row" id="quotes">
+        <div class="col-xs-3"></div>
+        <div class="col-xs-6 text-center">
+            <div class="quote">
+                <h3 id="quote-content">If I create from the heart, nearly everything works; if from the head, almost nothing.
+                </h3>
+                <p id="quote-who">Marc Chagall</p>
+
+                <div class="btn btn-primary" id="tweet"><a class="twitter-share-button fa fa-twitter"
+                                                                                                   href="https://twitter.com/intent/tweet?text=Hello%20world">
+                    Tweet</a></div>
+
+                <button class="btn btn-primary" id="change">Next</button>
+
+            </div>
+
+
+        </div>
+        <div class="col-xs-3"></div>
+    </div>
+</div>
+<script>
+    var image;
+    var quote;
+    var tweet;
+    function getQuote(){
+        $.getJSON("http://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=30&callback=", function(a) {
+            quote = Math.floor(Math.random()*a.length);
+            $(".quote h3").text(a[quote].content.slice(3,a[quote].content.length-5));
+            $(".quote p").text(a[quote].title);
+            tweet = "https://twitter.com/intent/tweet?text="+a[quote].content.slice(3,a[quote].content.length-5)+"%20"+a[quote].title;
+            $(".twitter-share-button").attr("href",tweet);
+        });
+    }
+    getQuote();
+
+    $("#change").on("click",function(){
+
+        getQuote();
+
+        image = "url(https://collegexam.files.wordpress.com/2016/07/"+Math.floor(Math.random()*60)+".jpg)";
+        $("body").css("background-image", image);
+    });
+
+
+</script>
+</body>
+
+</html>

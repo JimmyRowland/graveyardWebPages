@@ -1,0 +1,47 @@
+@import "https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css";
+#quotes{
+    top:30%;
+    position:absolute;
+}
+body{
+    background-color:cornflowerblue;
+    background-size: cover;
+}
+h1{
+    color:greenyellow;
+
+}
+.random{
+    top:90%;
+    position:absolute;
+}
+#quotes > .col-xs-6{
+    background-color:white;
+    -webkit-border-radius:20px;
+    -moz-border-radius:20px;
+    border-radius:20px;
+}
+.quote > h3::before{
+    font-family: FontAwesome;
+    content:"\f10d";
+    margin-right:10px;
+}
+#change{
+    position: relative;
+    right:10px;
+    bottom:15px;
+    float: right;
+    padding:5px 15px ;
+}
+#tweet{
+    font-family: FontAwesome;
+    position: relative;
+    left:10px;
+    bottom:15px;
+    float: left;
+    padding:5px 15px ;
+
+}
+.twitter-share-button{
+    color:white;
+}

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>wiki</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" type="text/css">
+    <script   src="https://code.jquery.com/jquery-2.2.4.min.js"   integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="   crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<style>
+    .searchBox{
+        margin:10% auto auto auto;
+        width:700px;
+        height:auto;
+    }
+
+    .form-control{
+        width:200px;
+
+    }
+
+    .result{
+        display:none;
+        width: 100%;
+        text-align: left;
+
+    }
+    .result{
+        background-color: chartreuse;
+        border: 2px black solid;
+        margin: 20px auto;
+        padding: 10px;
+
+    }
+    .result >h4,
+    .result >p{
+        margin:20px;
+    }
+
+</style>
+</head>
+<body>
+<div class="container">
+    <div class="searchBox text-center">
+        <h1>Wikisearch</h1>
+        <h3><a href="https://en.wikipedia.org/wiki/Special:Random">Click here for a random article</a></h3>
+
+        <div class="input-group">
+
+            <input type="text" class="form-control" placeholder="wikiSearch" id="input"/>
+            <span class="input-group-btn" id="click"><button type="button" class="btn btn-primary" onclick=wiki()><i class="fa fa-search"></i></button></span>
+
+        </div>
+
+
+    </div>
+
+    <div class="result" id="0">
+        <h4 class="title"></h4>
+        <p class="content"></p>
+    </div>
+    <div class="result" id="1">
+        <h4 class="title"></h4>
+        <p class="content"></p>
+    </div>
+    <div class="result" id="2">
+        <h4 class="title"></h4>
+        <p class="content"></p>
+    </div>
+    <div class="result" id="3">
+        <h4 class="title"></h4>
+        <p class="content"></p>
+    </div>
+    <div class="result" id="4">
+        <h4 class="title"></h4>
+        <p class="content"></p>
+    </div>
+    <div class="result" id="5">
+        <h4 class="title"></h4>
+        <p class="content"></p>
+    </div>
+    <div class="result" id="6">
+        <h4 class="title"></h4>
+        <p class="content"></p>
+    </div>
+    <div class="result" id="7">
+        <h4 class="title"></h4>
+        <p class="content"></p>
+    </div>
+    <div class="result" id="8">
+        <h4 class="title"></h4>
+        <p class="content"></p>
+    </div>
+    <div class="result" id="9">
+        <h4 class="title"></h4>
+        <p class="content"></p>
+    </div>
+
+</div>
+<script>
+    var userInput;
+    var $inputText=$('#input');
+    var $selector;
+    function wiki(){
+        userInput=$inputText.val();
+        $inputText.attr("placeholder",userInput);
+        $(".searchBox").css("margin-top","0");
+        search();
+    }
+    $inputText.keypress(function (e) {
+        if (e.which == 13) {
+            wiki()
+        }
+    });
+
+    function search(){
+        var boxes=[];
+        var url = "https://en.wikipedia.org/w/api.php?action=opensearch&search=" + userInput +"&limit=10&namespace=0&redirects=resolve&format=json";
+        $.ajax({
+            url: url,
+            dataType: "jsonp"
+        });
+
+        $.getJSON({
+            url: url,
+            dataType: "jsonp"
+        }, function(data) {
+            for (var i in data[1]) {
+                boxes.push([data[1][i], data[2][i], data[3][i]]);
+                $selector = $("#" + i);
+                $selector.find(".title").text(data[1][i]);
+                $selector.find(".content").text(data[2][i]);
+                $selector.wrap(function () {
+                    return '<a href="' + data[3][i] + '"></a>'
+                });
+
+            }
+            $(".result").css("display","block");
+        });
+
+
+
+    }
+
+</script>
+</body>
+</html>

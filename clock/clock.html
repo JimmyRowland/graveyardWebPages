@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Clock</title>
+    <link rel="stylesheet" href="../bootstrap-3.3.6/dist/css/bootstrap.css" type="text/css">
+    <link rel="stylesheet" href="../font-awesome-4.6.3/css/font-awesome.min.css" type="text/css">
+    <script   src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <style>
+        body{
+            background-color: #2f6f9f;
+            color:white;
+        }
+        .circle{
+            border-radius: 50%;
+            border: solid palevioletred;
+            width:200px;
+            height:200px;
+            margin:10% auto;
+            padding:8%;
+        }
+        span{
+            font-size:20px;
+            margin:10px;
+        }
+        h1 {
+            font: 60px simplified;
+        }
+        .wrapper{
+            width:400px;
+
+            margin:10% auto;
+        }
+        .circle{
+            cursor:pointer;
+        }
+    </style>
+</head>
+<body>
+<div class="wrapper text-center">
+    <h1>Clock</h1>
+    <div class="row">
+        <div class="col-xs-6">
+            <p>BREAK LENGTH</p>
+            <button class="btn btn-default" id="break-">-</button>
+            <span class="break" id="break">1</span>
+            <button class="btn btn-default" id="break+">+</button>
+        </div>
+        <div class="col-xs-6">
+            <p>SESSION LENGTH</p>
+            <button class="btn btn-default" id="session-">-</button>
+            <span class="session" id="session">3</span>
+            <button class="btn btn-default" id="session+">+</button>
+        </div>
+    </div>
+    <div class="circle" onclick="startclock()">
+        <h2 id="sessionOrBreak">Session</h2>
+        <h2 class="session" id="clock">3</h2>
+    </div>
+</div>
+<script>
+    var running=false;
+    var Break=false;
+    var $sessionOrBreak=$("#sessionOrBreak");
+    $("button").attr("onclick","btn(this.id)");
+    function btn(id){
+        if ((!running)||Break){
+            Break=false;
+            if(running){
+                running=!running;
+            }
+            $sessionOrBreak.text("Session");
+            console.log(Number('00010'),id,id.length,typeof (Number('123')));
+            var length=id.length;
+            var operator=id[length-1];
+            var classToChange=id.slice(0,length-1);
+            var $classToChange=$("."+classToChange);
+            var temp=$("#"+classToChange).text();
+
+            var time= Number(temp);
+            if(operator==='-'){
+                if(time>1){
+                    time--;
+                }
+
+            }else if(operator==='+'){
+                time++;
+            }
+            console.log(time,operator,classToChange);
+            $classToChange.text(time);
+        }
+    }
+    function startclock(){
+        running=!running;
+
+        var breakLength=Number($("#break").text());
+        var sessionLength=Number($("#session").text());
+        var $clock=$("#clock");
+        var time=$clock.text();
+
+        var m;
+        var s;
+        if(time.includes(':')){
+            var index=time.indexOf(':');
+            var length=time.length;
+            m = Number(time.slice(0,index));
+            s = Number(time.slice(index+1,length));
+
+        }else{
+            m=Number(time);
+            s=0;
+        }
+
+        function countDown(){
+            console.log(m,s);
+            if(s===0 && m!==0){
+                s=59;
+                m--;
+            }else if(s===0 && m===0){
+
+                Break=!Break;
+                console.log(running,sessionLength,breakLength,$sessionOrBreak.text());
+                if(!Break){
+                    m=sessionLength;
+                    s=0;
+                    $sessionOrBreak.text("Session");
+                }else{
+                    m=breakLength;
+                    s=0;
+                    $sessionOrBreak.text("Break");
+                }
+
+            }else{
+                s--;
+            }
+            if(s<10){
+                time=m+':'+'0'+s;
+
+            }else{
+                time=m+':'+s;
+
+            }
+            $clock.text(time);
+            console.log(time,running);
+            if(running){var x = setTimeout(countDown,1000);}
+
+
+
+
+        }
+        if(running){
+            setTimeout(countDown,1000);
+        }
+
+
+
+
+
+
+    }
+
+</script>
+</body>
+</html>
