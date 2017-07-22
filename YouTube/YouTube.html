@@ -12,6 +12,7 @@
 </head>
 <body>
 <script>
+
     // ==UserScript==
     // @name         Improve YouTube Transcript for Language learning
     // @namespace    http://tampermonkey.net/
@@ -24,9 +25,10 @@
     // @include      http*://youtube.com/*
     // @run-at       document-end
     // ==/UserScript==
+    waitForKeyElements ("#eow-description", add);
     function add(){
         if(document.getElementsByClassName("yt-ui-menu-item has-icon yt-uix-menu-close-on-select action-panel-trigger action-panel-trigger-transcript").length===0){return;}
-        $('head').append('<style>.jfk-bubble.gtx-bubble { left:0 !important }</style>');
+        $('head').append('<style>.jfk-bubble.gtx-bubble { left:0 !important }</style>'); //google translate bubble
         var $bar = document.getElementById("watch8-secondary-actions");
         var $newButton= document.createElement('div');
         $newButton.className="yt-uix-menu ";
@@ -44,8 +46,12 @@
         var $windowTranscript=document.getElementById("watch-actions-transcript");
         var $h2Transcript= document.getElementsByClassName("yt-card-title");
         var $title=document.getElementById("watch-header");
+        var $header0=document.getElementById("masthead-positioner-height-offset");
+        var $header1=document.getElementById("masthead-positioner");
         $transcriptButton.onclick=function(){
             $title.style.display="none";
+            $header0.style.display="none";
+            $header1.style.display="none";
             var sheet = document.createElement("STYLE");
             var t = document.createTextNode(".caption-line-time { display: none; }.caption-line-text { width: 100%; }");
             sheet.appendChild(t);
@@ -56,7 +62,7 @@
 
 
 
-            setTimeout(function(){$close.onclick=function(){$title.style.display="block";};},10);
+            setTimeout(function(){$close.onclick=function(){$title.style.display="block";$header0.style.display='';$header1.style.display='';};},10);
 
 
 

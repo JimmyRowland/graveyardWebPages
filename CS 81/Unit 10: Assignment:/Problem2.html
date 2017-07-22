@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Problem #2 </title>
+    <script   src="https://code.jquery.com/jquery-2.2.4.min.js"   integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="   crossorigin="anonymous"></script>
+
+    <script>
+        $(document).ready(()=>{
+            console.log('test');
+            $("#btn1").click(()=>{$("p").append("<strong> Appended text</strong>")});
+            $("#btn2").click(()=>{$("ol").append("<li>Appended item</li>")});
+
+        });
+    </script>
+</head>
+<body>
+<p>This is a paragraph</p>
+<p>This is another paragraph</p>
+<ol>
+    <li>List item 1</li>
+    <li>List item 2</li>
+    <li>List item 3</li>
+</ol>
+<button id="btn1">Append text</button>
+<button id="btn2">Append list items</button>
+
+</body>
+</html>

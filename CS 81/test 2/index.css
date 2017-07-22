@@ -1,0 +1,14 @@
+.buttons{
+    position: absolute;
+    margin:40% 49% auto;
+}
+.android{
+    position: absolute;
+    margin:20% auto;
+    left:0;
+    width: 100%;
+    overflow: hidden;
+}
+#svgWrapper{
+    position: relative;
+}
