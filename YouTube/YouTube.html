@@ -20,7 +20,7 @@
     // @description  Improved YouTube Transcript for Language learning, click transcript to hide the element below the video.
     // @author       AVES
     // @require      https://greasyfork.org/scripts/2199-waitforkeyelements/code/waitForKeyElements.js?version=6349
-    // @require  https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js
+    // @require  https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js
     // @include      http*://*.youtube.com/*
     // @include      http*://youtube.com/*
     // @run-at       document-end
@@ -59,11 +59,28 @@
             $h2Transcript[0].style.float="right";
             $h2Transcript[0].style.padding="0 10px";
             var $close= document.getElementById("action-panel-dismiss");
-
-
-
             setTimeout(function(){$close.onclick=function(){$title.style.display="block";$header0.style.display='';$header1.style.display='';};},10);
+            waitForKeyElements("#cp-0",()=>{$("#watch-action-panels").clone().prependTo("#watch7-sidebar");});
+            $("#content").css("margin","0");
+            $("#player").css("margin","0");
+            var resizer = function() {
+                var clientWidth = document.documentElement.clientWidth || window.innerWidth || document.body.clientWidth;
+                var clientHeight = document.documentElement.clientHeight || window.innerHeight || document.body.clientHeight;
+                var player = document.getElementById("player");
+                var playerAPI = document.getElementById("player-api-legacy") || document.getElementById("player-api");
+                var videoContainer = player;
 
+                var html5container = document.getElementsByTagName("video");
+                console.log(html5container);
+                var size = 120;
+                html5container[0].style.width = size + "%";
+                html5container[0].style.height = size + "%";
+
+                player.removeAttribute("class");
+                playerAPI.style.width = clientWidth + "px";
+                playerAPI.style.height = clientHeight + "px";
+            };
+            resizer();
 
 
         };
