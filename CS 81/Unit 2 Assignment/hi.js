@@ -34,35 +34,45 @@ function eventFire(el, etype){
         el.dispatchEvent(evObj);
     }
 }
-
+window.alert = function(msg) {
+    console.log(msg);
+};
 function voteBrady() {
     // click brady
-    $('#PDI_answer44802685').trigger('click');
+    $('#PDI_answer44811670').trigger('click');
     // click vote
-    eventFire(document.getElementById('pd-vote-button9793268'), 'click');
-    console.log(counter++);
+    let voteButton = function(){
+        setTimeout(()=>{
+            if(document.getElementById('pd-vote-button9794855')){
+                try{
+                    $('#PDI_answer44811670').trigger('click');
+                    eventFire(document.getElementById('pd-vote-button9794855'), 'click');
+                }
+                catch(e){console.log(e);}
+                voteButton();
+            }else{
+                console.log(counter++);
 
-    // wait 2 seconds to give the request time to finish
-    setTimeout(function(){
-        // check it hasn't stopped counting the votes because they exceed the vote/time cap
-        if ($('#PDI_container9793268 .pds-question .pds-question-top').text() !== " Thank you for voting! ") {
-            // if the vote limit is exceeded, stop the interval and wait a few minutes
-            console.log('vote limit exceeded, waiting 5 min');
-            clearInterval(voteBradyInterval);
-            setTimeout(function() {
-                // after a few minutes, start voting again
-                console.log('waited 5 min, restarting interval');
-                voteBradyInterval = setInterval(voteBrady, 3000);
-            }, (60*5*1000));
-        }
+                // wait 2 seconds to give the request time to finish
+                setTimeout(function(){
 
-        // trigger the function that returns you to the vote from the results
-        PDV_go9793268();
 
-    }, 2000);
+                    // trigger the function that returns you to the vote from the results
+                    try{PDV_go9794855();}
+                    catch(e){console.log(e);}
+
+
+                }, 1000+Math.random()*1000);
+
+            }
+        },1000+Math.random()*2000)
+    };
+    voteButton();
+
+
 }
 
 // vote the first time
-voteBrady();
+// voteBrady();
 // vote again every 3 seconds
-voteBradyInterval = setInterval(voteBrady, 3000);
+voteBradyInterval = setInterval(voteBrady, 12000+Math.random()*6000);
